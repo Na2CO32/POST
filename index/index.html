@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>空間使用指南</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800 pb-10">
+
+    <div id="content" class="max-w-md mx-auto px-6 pt-10">
+        <h1 id="room-name" class="text-3xl font-bold text-blue-600 mb-4">載入中...</h1>
+        
+        <section class="mb-6">
+            <h2 class="text-xl font-semibold border-l-4 border-blue-500 pl-2 mb-3">使用規則</h2>
+            <ul id="rules" class="list-disc list-inside space-y-2 text-gray-600"></ul>
+        </section>
+
+        <section class="mb-6">
+            <h2 class="text-xl font-semibold border-l-4 border-orange-500 pl-2 mb-3">離場檢查清單</h2>
+            <div id="checklist" class="bg-white p-4 rounded-lg shadow-sm"></div>
+        </section>
+
+        <section class="mb-8">
+            <h2 class="text-xl font-semibold border-l-4 border-red-500 pl-2 mb-3">注意事項</h2>
+            <p id="notice" class="bg-red-50 text-red-700 p-4 rounded-lg"></p>
+        </section>
+
+        <footer class="text-center text-gray-400 text-sm">
+            © 2026 管理處維護
+        </footer>
+    </div>
+
+    <script>
+        // 這裡定義你的房間資料
+        const roomData = {
+            "meeting-room": {
+                name: "大會議室",
+                rules: ["需提前預約", "禁止攜帶湯水食物", "使用時間最長 2 小時"],
+                checklist: ["投影機已關閉", "椅子歸位", "垃圾帶走", "燈光空調關閉"],
+                notice: "若設備故障，請撥打分機 #101 聯繫技術人員。"
+            },
+            "pantry": {
+                name: "茶水間",
+                rules: ["冰箱每週五清空", "保持流理台乾燥"],
+                checklist: ["微波爐內無殘留物", "水龍頭已關緊"],
+                notice: "公用咖啡機使用後請隨手清理噴濺處。"
+            }
+        };
+
+        // 取得網址參數
+        const params = new URLSearchParams(window.location.search);
+        const roomId = params.get('room');
+        const data = roomData[roomId];
+
+        if (data) {
+            document.getElementById('room-name').innerText = data.name;
+            document.getElementById('rules').innerHTML = data.rules.map(r => `<li>${r}</li>`).join('');
+            document.getElementById('checklist').innerHTML = data.checklist.map(c => `
+                <div class="flex items-center mb-2">
+                    <input type="checkbox" class="w-4 h-4 mr-2"> <span>${c}</span>
+                </div>
+            `).join('');
+            document.getElementById('notice').innerText = data.notice;
+        } else {
+            document.getElementById('content').innerHTML = "<h1 class='text-xl text-center'>找不到該空間資訊，請聯繫管理員。</h1>";
+        }
+    </script>
+</body>
+</html>
